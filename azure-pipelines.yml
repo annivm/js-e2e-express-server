@@ -21,6 +21,11 @@ steps:
     npm run build
   displayName: 'npm install and build'
 
+- script: |
+    mkdir -p bin/TestiArtifact
+    echo "testi" > bin/TestiArtifact/test.txt
+  displayName: 'Create artifact content'
+
 - task: PublishPipelineArtifact@1
   inputs:
     targetPath: $(System.DefaultWorkingDirectory)/bin/TestiArtifact
