@@ -21,13 +21,19 @@ steps:
     npm run build
   displayName: 'npm install and build'
 
-- script: |
-    mkdir -p bin/TestiArtifact
-    echo "testi" > bin/TestiArtifact/test.txt
-  displayName: 'Create artifact content'
-
-- task: PublishPipelineArtifact@1
+- task: ArchiveFiles@2
+  displayName: 'Archive files'
   inputs:
-    targetPath: $(System.DefaultWorkingDirectory)/bin/TestiArtifact
-    artifactName: TestiArtifact-$(System.JobPositionInPhase)
+    rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
 
